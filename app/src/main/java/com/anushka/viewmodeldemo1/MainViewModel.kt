@@ -1,19 +1,35 @@
 package com.anushka.viewmodeldemo1
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class MainViewModel(startingTotal: Int): ViewModel() {
-    private var total = 0
+    //LiveData 안 씀
+//    private var total = 0
+//
+//    init {
+//        total = startingTotal
+//    }
+//
+//    fun getTotal(): Int {
+//        return total
+//    }
+//
+//    fun setTotal(input: Int){
+//        total += input
+//    }
+
+
+    //LiveData는 데이터의 변화를 감지하고 UI에 전송하는 역할(자동으로 반영)
+    private var _total = MutableLiveData<Int>()
+    val total: MutableLiveData<Int>
+        get() = _total
 
     init {
-        total = startingTotal
-    }
-
-    fun getTotal(): Int {
-        return total
+        _total.value = startingTotal
     }
 
     fun setTotal(input: Int){
-        total += input
+        _total.value = _total.value?.plus(input)
     }
 }
