@@ -8,7 +8,14 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.anushka.viewmodeldemo1.databinding.ActivityMainBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import kotlin.random.Random
 
 const val TAG = "MainActivity"
 //LiveData 사용하고 안하고 코드 차이 보여준다.
@@ -32,8 +39,18 @@ class MainActivity : AppCompatActivity() {
 
 
         //LiveData 쓸 때
-        viewModel.total.observe(this) {
-            binding.tvNumber.text = it.toString()
+//        viewModel.total.observe(this) {
+//            binding.tvNumber.text = it.toString()
+//        }
+//        binding.btnAdd.setOnClickListener {
+//            viewModel.setTotal(binding.etNumber.text.toString().toInt())
+//        }
+
+        //StateFlow 쓸 때
+        lifecycleScope.launch {
+            viewModel.total.collect {
+                binding.tvNumber.text = it.toString()
+            }
         }
         binding.btnAdd.setOnClickListener {
             viewModel.setTotal(binding.etNumber.text.toString().toInt())
